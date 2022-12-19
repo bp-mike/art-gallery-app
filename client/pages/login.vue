@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-signin">
     <h1 class="h3 mb-3 fw-normal">Login</h1>
 
     <div class="form-floating">
@@ -41,8 +41,13 @@ export default {
           password: this.password,
         }
       );
-      // Save token to local storage
+      //   Save token to local storage
       localStorage.setItem("token", data.loginToken);
+
+      //   save token to axios header
+      this.$axios.defaults.headers.common = {
+        Authorization: `Bearer ${data.loginToken}`,
+      };
 
       this.$router.push("/");
     },

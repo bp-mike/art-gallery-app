@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-signin">
     <h1 class="h3 mb-3 fw-normal">Register</h1>
 
     <div class="form-floating">

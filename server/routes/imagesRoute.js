@@ -3,11 +3,12 @@ const router = express.Router();
 const verify = require("./verifyTokens");
 const Image = require("../models/image");
 const multer = require("multer");
-const path = require("path");
+// const path = require("path");
+const fs = require("fs");
 
 // set storage engine
 const Storage = multer.diskStorage({
-  destination: "uploads",
+  destination: "upload",
   filename: function (req, file, cb) {
     cb(null, file.originalname + Date.now());
   },
@@ -16,7 +17,7 @@ const Storage = multer.diskStorage({
 // init upload
 const upload = multer({
   storage: Storage,
-}).single("image");
+}).single("file");
 
 // get a list of images from the database
 router.get("/", async (req, res) => {
@@ -38,6 +39,8 @@ router.get("/", async (req, res) => {
 //   });
 // });
 router.post("/", upload, async (req, res) => {
+  console.log(req.file);
+  console.log(upload);
   const image = new Image({
     name: req.body.name,
     desc: req.body.desc,

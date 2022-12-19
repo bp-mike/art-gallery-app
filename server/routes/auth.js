@@ -66,6 +66,33 @@ router.post("/login", async (req, res) => {
   // res.send("Logged in");
 });
 
+// reset password
+router.post("/pwd-reset", async (req, res) => {
+  // validate the data before we make a user
+  const schema = Joi.object({
+    email: Joi.string().min(6).required().email(),
+    password: Joi.string().min(6).required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // checking if the email exists
+  const user = await User.findOne({
+    email: req.body.email,
+  });
+  if (!user) return res.status(400).send("Email is not found");
+
+  // hash passwords
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+  // update the user's "password" field to null
+  user.password = hashedPassword;
+  await user.save();
+
+  res.send("Password reset");
+});
+
 // logout user
 // router.post("/logout", verify, async (req, res) => {
 //   // get the user from the request object
