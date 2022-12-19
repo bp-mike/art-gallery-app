@@ -24,6 +24,6 @@ mongoose.connect(process.env.DB_CONNECTION, () => {
   console.log("connected");
 });
 
-app.listen(3000, () => {
-  console.log(`Server running at ${3000}`);
+app.listen(5000, () => {
+  console.log(`Server running at ${5000}`);
 });
