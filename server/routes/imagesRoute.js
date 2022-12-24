@@ -7,17 +7,23 @@ const multer = require("multer");
 const fs = require("fs");
 
 // set storage engine
-const Storage = multer.diskStorage({
-  destination: "upload",
+// const Storage = multer.diskStorage({
+//   destination: "upload",
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname + Date.now());
+//   },
+// });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "upload");
+  },
   filename: function (req, file, cb) {
-    cb(null, file.originalname + Date.now());
+    cb(null, file.originalname); // <-- Use the original file name
   },
 });
 
 // init upload
-const upload = multer({
-  storage: Storage,
-}).single("file");
+const upload = multer({ storage: storage }).single("file");
 
 // get a list of images from the database
 router.get("/", async (req, res) => {
@@ -44,10 +50,11 @@ router.post("/", upload, async (req, res) => {
   const image = new Image({
     name: req.body.name,
     desc: req.body.desc,
-    image: {
-      data: req.file.filename,
-      contentType: req.file.mimetype,
-    },
+    path: "../../server/upload/" + req.file.filename,
+    // image: {
+    //   data: req.file.filename,
+    //   contentType: req.file.mimetype,
+    // },
   });
 
   try {

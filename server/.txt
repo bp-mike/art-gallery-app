@@ -1,0 +1,27 @@
+axios.post(url,{
+    first_name: data.first_name,
+    last_name:data.last_name,
+    email:data.email,
+    phone:data.phone,
+    msz:data.msz
+}).then(response => {
+
+    let statusCode = response.status,
+        success = response.ok;
+
+    response.json().then(response => {
+
+        if(!success){
+            //handle errors here
+            console.log(response.message)
+            return;
+        }
+
+        // handle successful requests here
+        console.log(response.message)
+
+    })
+}).catch((error) => {
+    // catch any unexpected errors
+    console.log(error);
+})
